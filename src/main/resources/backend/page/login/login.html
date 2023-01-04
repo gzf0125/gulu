@@ -20,7 +20,8 @@
 </head> 
 
 <body>
-  <div class="login" id="login-app">
+
+  <div class="login" id="login-app"><!--唯一标识-->
     <div class="login-box">
       <img src="../../images/login/login-l.png" alt="">
       <div class="login-form">
@@ -38,7 +39,7 @@
           </el-form-item>
           <el-form-item style="width:100%;">
             <el-button :loading="loading" class="login-btn" size="medium" type="primary" style="width:100%;"
-              @click.native.prevent="handleLogin">
+              @click.native.prevent="handleLogin"><!--点击登录按钮调用handleLogin -->
               <span v-if="!loading">登录</span>
               <span v-else>登录中...</span>
             </el-button>
@@ -60,7 +61,7 @@
 
   <script>
     new Vue({
-      el: '#login-app',
+      el: '#login-app',<!--唯一标识-->
       data() {
         return {
           loginForm:{
@@ -94,14 +95,16 @@
       },
       created() {
       },
-      methods: {
-        async handleLogin() {
+      methods: {<!--方法 -->
+        async handleLogin() {<!--点登录按钮调用 -->
           this.$refs.loginForm.validate(async (valid) => {
+            <!--检验方法 ，loginApi登录方法里面带有请求地址-->
             if (valid) {
               this.loading = true
               let res = await loginApi(this.loginForm)
               if (String(res.code) === '1') {
                 localStorage.setItem('userInfo',JSON.stringify(res.data))
+               // 相应的数据转为JSON,(key,value
                 window.location.href= '/backend/index.html'
               } else {
                 this.$message.error(res.msg)
