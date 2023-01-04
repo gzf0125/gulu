@@ -2,8 +2,11 @@ package com.gulu;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
+
 @Slf4j//能省略get、set方法
 @SpringBootApplication
+@ServletComponentScan//加入该注解才能扫描Web FIlter过滤器
 public class GuluApplication {
     public static void main(String[] args) {
         SpringApplication.run(GuluApplication.class,args);
