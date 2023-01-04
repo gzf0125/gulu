@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 
 @Slf4j
 @RestController
@@ -71,5 +72,27 @@ public class EmployeeController {
         //清理Session中保存的当前登录员工的id
         request.getSession().removeAttribute("employee");
         return R.success("退出成功");
+    }
+
+    /**
+     * 新增员工
+     * @param employee
+     * @return
+     */
+
+//    @RequestBody主要用来接收前端传递给后端的json字符串中的数据的(请求体中的数据的)
+    @PostMapping
+    public R<String> save(HttpServletRequest request,@RequestBody  Employee employee){
+        log.info("新增员工，员工信息:{}",employee.toString());
+        //设置初始密码123456，需要进行md5加密处理
+        employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
+        employee.setCreateTime(LocalDateTime.now());//获取系统时间
+        employee.setUpdateTime(LocalDateTime.now());
+        //获取当前登录用户的id
+        Long empId=(Long)request.getSession().getAttribute("employee");
+        employee.setCreateUser(empId);//操作人
+        employee.setUpdateUser(empId);//更新人
+        employeeService.save(employee);
+        return R.success("新增员工成功");
     }
 }
