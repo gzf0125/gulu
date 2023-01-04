@@ -58,4 +58,18 @@ public class EmployeeController {
         request.getSession().setAttribute("employee",emp.getId());
         return R.success(emp);
     }
+
+    /**
+     * 员工退出功能
+     * @param request
+     * @return
+     */
+    @PostMapping("/logout")
+    //HttpServletRequest request对象代表客户端请求，http请求头中的所有信息都封装在这个对象中，
+    //通这个对象提供的方法，可以获得客户端请求的所有信息
+    public R<String> logout(HttpServletRequest request){
+        //清理Session中保存的当前登录员工的id
+        request.getSession().removeAttribute("employee");
+        return R.success("退出成功");
+    }
 }

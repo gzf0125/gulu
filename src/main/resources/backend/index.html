@@ -81,7 +81,7 @@
             <div class="right-menu">
               <div class="avatar-wrapper">{{ userInfo.name }}</div>
               <!-- <div class="logout" @click="logout">退出</div> -->
-              <img src="images/icons/btn_close@2x.png" class="outLogin" alt="退出" @click="logout" />
+              <img src="images/icons/btn_close@2x.png" class="outLogin" alt="退出" @click="logout" /><!-- 点击退出执行logout方法 -->
             </div>
           </div>
           <div class="app-main" v-loading="loading">
@@ -96,6 +96,7 @@
               frameborder="0"
               v-show="!loading"
             ></iframe>
+<!--            iframe用于在该页面中展示新的页面-->
           </div>
         </div>
       </div>
@@ -117,6 +118,7 @@
             defAct: '2',
             menuActived: '2',
             userInfo: {},
+            //菜单栏数据
             menuList: [
               // {
               //   id: '1',
@@ -155,7 +157,7 @@
               //   ],
               // },
             ],
-            iframeUrl: 'page/member/list.html',
+            iframeUrl: 'page/member/list.html', //默认页面
             headTitle: '员工管理',
             goBackFlag: false,
             loading: true,
@@ -164,7 +166,7 @@
         },
         computed: {},
         created() {
-          const userInfo = window.localStorage.getItem('userInfo')
+          const userInfo = window.localStorage.getItem('userInfo')//从本地存储localStorage中读取userInfo对象
           if (userInfo) {
             this.userInfo = JSON.parse(userInfo)
           }
@@ -179,10 +181,12 @@
         },
         methods: {
           logout() {
+            // 调用logoutApi()方法
             logoutApi().then((res)=>{
               if(res.code === 1){
-                localStorage.removeItem('userInfo')
+                localStorage.removeItem('userInfo')//移出localStorage中的userInfo对象
                 window.location.href = '/backend/page/login/login.html'
+                // 获取当前页面地址（URL）并把浏览器重定向到新页面
               }
             })
           },

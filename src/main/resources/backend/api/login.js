@@ -7,8 +7,10 @@ function loginApi(data) {
 }
 
 function logoutApi(){
+  // 发送axios请求
   return $axios({
     'url': '/employee/logout',
     'method': 'post',
+    //向/employee/logout地址发送post请求
   })
 }
