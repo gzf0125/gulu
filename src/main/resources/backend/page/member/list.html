@@ -125,7 +125,7 @@
           }
         },
         computed: {},
-        created() {
+        created() {//生命周期函数，当VUe对象创建完，自动调用
           this.init()
           this.user = JSON.parse(localStorage.getItem('userInfo')).username
         },
