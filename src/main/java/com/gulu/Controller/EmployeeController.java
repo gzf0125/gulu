@@ -124,4 +124,22 @@ public class EmployeeController {
 
         return R.success(pageInfo);
     }
+
+    /**
+     * 根据id修改员工信息
+     * @param employee
+     * @return
+     *  @RequestBody主要用来接收前端传递给后端的json字符串中的数据的(请求体中的数据的)
+     */
+    @PutMapping
+    public R<String> update(HttpServletRequest request,@RequestBody Employee employee){
+        log.info(employee.toString());
+        long empId = (long)request.getSession().getAttribute("employee");
+        employee.setUpdateTime(LocalDateTime.now());
+        employee.setUpdateUser(empId);
+        employeeService.updateById(employee);
+        return R.success("员工信息修改成功");
+    }
+
+
 }
