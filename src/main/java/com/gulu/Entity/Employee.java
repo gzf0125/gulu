@@ -29,8 +29,10 @@ public class Employee implements Serializable {//对象的序列化处理Seriali
 
     private Integer status;
 
+    @TableField(fill = FieldFill.INSERT) //插入时填充字段
     private LocalDateTime createTime;
 
+    @TableField(fill = FieldFill.INSERT_UPDATE)//插入和更新时填充字段
     private LocalDateTime updateTime;
 
     @TableField(fill = FieldFill.INSERT)//自动填充属性实现在进行插入（insert）操作时对添加了注解@TableField(fill = FieldFill.INSERT)的字段进行自动填充
@@ -38,5 +40,7 @@ public class Employee implements Serializable {//对象的序列化处理Seriali
 
     @TableField(fill = FieldFill.INSERT_UPDATE)//进行插入（insert）和更新（update）时进行自动填充。
     private Long updateUser;
+
+
 
 }
