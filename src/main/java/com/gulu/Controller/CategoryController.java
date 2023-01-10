@@ -1,15 +1,14 @@
 package com.gulu.Controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gulu.Common.R;
 import com.gulu.Entity.Category;
 import com.gulu.Service.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 分类管理
@@ -26,5 +25,20 @@ public class CategoryController {
         log.info("category:{}",category);
         categoryService.save(category);
         return R.success("新增分类成功");
+    }
+
+    @GetMapping("page")
+    public R<Page> page(int page,int pageSize){
+        //分页构造器
+        Page<Category> pageInfo=new Page<>(page,pageSize);
+        //条件构造器，排序的条件
+        LambdaQueryWrapper<Category> queryWrapper=new LambdaQueryWrapper<>();
+        //添加排序条件，根据sort进行排序
+        queryWrapper.orderByDesc(Category::getSort);
+
+        //进行分页查询
+        categoryService.page(pageInfo,queryWrapper);
+
+        return R.success(pageInfo);
     }
 }
