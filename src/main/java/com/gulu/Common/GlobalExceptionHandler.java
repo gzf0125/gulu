@@ -34,4 +34,18 @@ public class GlobalExceptionHandler {
         }
         return R.error("未知错误");
     }
+
+    /**
+     * 异常处理方法，Controller抛出SQLIntegrityConstraintViolationException该异常
+     * 会被拦截到
+     * @return
+     */
+    @ExceptionHandler(CustomerException.class)
+    public R<String> exceptionHandler(CustomerException ex){
+        log.error(ex.getMessage());
+
+        return R.error(ex.getMessage());
+
+
+    }
 }
