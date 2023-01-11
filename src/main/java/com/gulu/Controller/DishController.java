@@ -86,5 +86,30 @@ public class DishController {
         return R.success(dishDtoPage);
     }
 
+    /**
+     * 根据id查询菜品信息和对应的口味信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    //通过 @PathVariable 可以将 URL 中占位符参数绑定到控制器处理方法的入参中:URL 中的 {xxx} 占位符可以通过
+    public R<DishDto> get(@PathVariable Long id){
+
+        DishDto dishDto = dishService.getByIdWithFlavor(id);
+
+        return R.success(dishDto);
+    }
+
+    /**
+     * 修改菜品
+     * @param dishDto
+     * @return
+     */
+    @PutMapping
+    public R<String> update(@RequestBody DishDto dishDto){
+        log.info(dishDto.toString());
+        dishService.updateWithFiavor(dishDto);
+        return R.success("修改菜品成功");
+    }
 
 }
