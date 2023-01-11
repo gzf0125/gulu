@@ -5,6 +5,8 @@ import com.gulu.DTO.SetmealDto;
 import com.gulu.Entity.Setmeal;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 
 public interface SetmealService extends IService<Setmeal> {
     /**
@@ -12,4 +14,10 @@ public interface SetmealService extends IService<Setmeal> {
      * @param setmealDto
      */
     void saveWithDish(SetmealDto setmealDto);
+
+    /**
+     * 删除套餐和套餐菜品关联表
+     * @param ids
+     */
+    void removeWithDish(List<Long> ids);
 }

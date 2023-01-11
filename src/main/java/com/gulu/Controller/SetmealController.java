@@ -83,4 +83,18 @@ public class SetmealController {
         return R.success(dtoPage);
 
     }
+
+    /**
+     * 删除套餐
+     * @RequestParam用于将请求参数区数据映射到功能处理方法的参数上。
+     * @param ids
+     * @return
+     */
+
+    @DeleteMapping
+    public R<String> delete(@RequestParam List<Long> ids){
+        log.info("ids:{}",ids);
+        setmealService.removeWithDish(ids);
+        return R.success("套餐数据删除成功");
+    }
 }
