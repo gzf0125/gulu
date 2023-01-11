@@ -10,6 +10,7 @@ import com.gulu.Mapper.SetmealMapper;
 import com.gulu.Service.SetmealDishService;
 import com.gulu.Service.SetmealService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -67,4 +68,39 @@ public class SetmealServiceImpl extends ServiceImpl<SetmealMapper,Setmeal> imple
         //删除关系表的数据
         setmealDishService.remove(queryWrapper1);
     }
+
+
+    @Override
+    public SetmealDto getbyidWithDish(Long id) {
+        //查询套餐信息，从setmeal表中查询
+        Setmeal setmeal=this.getById(id);
+        SetmealDto setmealDto=new SetmealDto();
+        BeanUtils.copyProperties(setmeal,setmealDto);
+        //查询当前套餐对应的菜品，从setmeal_dish表查询
+        LambdaQueryWrapper<SetmealDish> queryWrapper=new LambdaQueryWrapper<>();
+        queryWrapper.eq(SetmealDish::getSetmealId,id);
+        List<SetmealDish> setmealDishes=setmealDishService.list(queryWrapper);
+        setmealDto.setSetmealDishes(setmealDishes);
+        return setmealDto;
+
+    }
+
+    @Transactional
+    @Override
+    public void updateWithDish(SetmealDto setmealDto) {
+        //更新Setmeal表基本信息
+        this.updateById(setmealDto);
+        //清理当前套餐对应菜品，Setmealdish表的delete操作
+        LambdaQueryWrapper<SetmealDish> queryWrapper=new LambdaQueryWrapper<>();
+        queryWrapper.eq(SetmealDish::getSetmealId,setmealDto.getId());
+        setmealDishService.remove(queryWrapper);
+        //添加当前提交过来的套餐菜品信息Setmealdish表的insert操作
+        List<SetmealDish> setmealDishes=setmealDto.getSetmealDishes();
+        setmealDishes=setmealDishes.stream().map((item)->{
+            item.setSetmealId(setmealDto.getId());
+            return item;
+        }).collect(Collectors.toList());
+        setmealDishService.saveBatch(setmealDishes);
+    }
+
 }

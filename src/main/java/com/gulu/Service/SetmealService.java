@@ -1,6 +1,7 @@
 package com.gulu.Service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.gulu.DTO.DishDto;
 import com.gulu.DTO.SetmealDto;
 import com.gulu.Entity.Setmeal;
 import org.apache.ibatis.annotations.Mapper;
@@ -20,4 +21,9 @@ public interface SetmealService extends IService<Setmeal> {
      * @param ids
      */
     void removeWithDish(List<Long> ids);
+
+    SetmealDto getbyidWithDish(Long id);
+
+    void updateWithDish(SetmealDto setmealDto);
+
 }

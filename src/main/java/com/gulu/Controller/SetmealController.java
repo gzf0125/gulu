@@ -7,6 +7,7 @@ import com.gulu.DTO.SetmealDto;
 import com.gulu.Entity.Category;
 import com.gulu.Entity.Dish;
 import com.gulu.Entity.Setmeal;
+import com.gulu.Entity.SetmealDish;
 import com.gulu.Service.CategoryService;
 import com.gulu.Service.SetmealDishService;
 import com.gulu.Service.SetmealService;
@@ -97,4 +98,18 @@ public class SetmealController {
         setmealService.removeWithDish(ids);
         return R.success("套餐数据删除成功");
     }
+
+    @GetMapping("/{id}")
+   public R<SetmealDto> get(@PathVariable Long id){
+        SetmealDto setmealDto=setmealService.getbyidWithDish(id);
+        return R.success(setmealDto);
+
+   }
+
+   @PutMapping
+   public R<String> update(@RequestBody SetmealDto setmealDto){
+        log.info(setmealDto.toString());
+        setmealService.updateWithDish(setmealDto);
+        return R.success("修改菜品成功");
+   }
 }
