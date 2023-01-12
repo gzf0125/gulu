@@ -17,4 +17,6 @@ public interface DishService extends IService<Dish> {
     void updateWithFiavor(DishDto dishDto);
 
     void updateStatus(List<Long> ids, int status);
+
+    void deleteWithStatus(List<Long> ids);
 }

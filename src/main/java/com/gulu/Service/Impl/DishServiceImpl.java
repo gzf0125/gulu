@@ -2,6 +2,7 @@ package com.gulu.Service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gulu.Common.CustomerException;
 import com.gulu.DTO.DishDto;
 import com.gulu.Entity.Dish;
 import com.gulu.Entity.DishFlavor;
@@ -93,6 +94,26 @@ public class DishServiceImpl extends ServiceImpl<DishMapper, Dish> implements Di
             }else dish.setStatus(0);
         }
         this.updateBatchById(dishes);
+    }
+
+    @Override
+    public void deleteWithStatus(List<Long> ids) {
+        //select count(*) from setmeal where id in {} and status =1
+        //查询菜品状态，确定是否可以删除
+        LambdaQueryWrapper<Dish> queryWrapper=new LambdaQueryWrapper<>();
+        queryWrapper.in(Dish::getId,ids);
+        queryWrapper.eq(Dish::getStatus,1);
+        int count=this.count(queryWrapper);
+        //如果不能删除，抛出一个业务异常
+        if (count>0){
+            throw new CustomerException("菜品正在售卖中，不能删除");
+        }
+        //如果可以删除，先删除菜品表中的数据 dish
+        this.removeByIds(ids);
+        LambdaQueryWrapper<DishFlavor> queryWrapper1=new LambdaQueryWrapper<>();
+        queryWrapper1.in(DishFlavor::getDishId,ids);
+        //删除关系表的数据
+        dishFlavorService.remove(queryWrapper1);
     }
 
 }

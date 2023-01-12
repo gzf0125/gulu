@@ -12,6 +12,7 @@ import com.gulu.Service.DishService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -135,6 +136,14 @@ public class DishController {
     public R<String> updateStatus(@RequestParam List<Long> ids,@PathVariable int status){
         dishService.updateStatus(ids, status);
         return  R.success("更新状态成功");
+    }
+
+    @Transactional
+    @DeleteMapping
+    public R<String> delete(@RequestParam List<Long> ids){
+        //需要对两个表进行操作，dish和dish_flavor表
+        dishService.deleteWithStatus(ids);
+        return R.success("删除成功");
     }
 
 }

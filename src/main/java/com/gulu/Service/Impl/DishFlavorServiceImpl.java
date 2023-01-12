@@ -8,6 +8,8 @@ import com.gulu.Service.DishFlavorService;
 import com.gulu.Service.DishService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class DishFlavorServiceImpl extends ServiceImpl<DishFlavorMapper,DishFlavor> implements DishFlavorService {
 }
