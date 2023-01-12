@@ -16,7 +16,9 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -111,5 +113,11 @@ public class SetmealController {
         log.info(setmealDto.toString());
         setmealService.updateWithDish(setmealDto);
         return R.success("修改菜品成功");
+   }
+
+   @PostMapping("/status/{status}")
+   public R<String> updateStatus(@RequestParam List<Long> ids,@PathVariable int status){
+       setmealService.updateStatus(ids,status);
+        return R.success("操作成功");
    }
 }

@@ -85,6 +85,10 @@ public class SetmealServiceImpl extends ServiceImpl<SetmealMapper,Setmeal> imple
 
     }
 
+    /**
+     * 修改套餐信息
+     * @param setmealDto
+     */
     @Transactional
     @Override
     public void updateWithDish(SetmealDto setmealDto) {
@@ -102,5 +106,19 @@ public class SetmealServiceImpl extends ServiceImpl<SetmealMapper,Setmeal> imple
         }).collect(Collectors.toList());
         setmealDishService.saveBatch(setmealDishes);
     }
+
+    @Override
+    public void updateStatus(List<Long> ids,int status) {
+        LambdaQueryWrapper<Setmeal> queryWrapper=new LambdaQueryWrapper<>();
+        queryWrapper.in(Setmeal::getId,ids);
+        List<Setmeal> list = this.list(queryWrapper);
+        for (Setmeal setmeal : list) {
+            if (status==1){
+                setmeal.setStatus(1);
+            }else setmeal.setStatus(0);
+        }
+        this.updateBatchById(list);
+    }
+
 
 }
