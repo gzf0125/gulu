@@ -6,6 +6,7 @@ import com.gulu.Common.CustomerException;
 import com.gulu.DTO.DishDto;
 import com.gulu.Entity.Dish;
 import com.gulu.Entity.DishFlavor;
+import com.gulu.Entity.SetmealDish;
 import com.gulu.Mapper.DishMapper;
 import com.gulu.Service.DishFlavorService;
 import com.gulu.Service.DishService;
