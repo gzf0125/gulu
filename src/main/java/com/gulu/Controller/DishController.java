@@ -6,6 +6,7 @@ import com.gulu.Common.R;
 import com.gulu.DTO.DishDto;
 import com.gulu.Entity.Category;
 import com.gulu.Entity.Dish;
+import com.gulu.Entity.DishFlavor;
 import com.gulu.Service.CategoryService;
 import com.gulu.Service.DishFlavorService;
 import com.gulu.Service.DishService;
@@ -119,7 +120,7 @@ public class DishController {
      * @return
      */
     @GetMapping("/list")
-    public R<List<Dish>> List( Dish dish){
+    public R<List<DishDto>> List( Dish dish){
         //构造查询条件
         LambdaQueryWrapper<Dish> queryWrapper=new LambdaQueryWrapper<>();
         //添加条件
@@ -129,7 +130,25 @@ public class DishController {
         //添加排序条件
         queryWrapper.orderByAsc(Dish::getSort).orderByDesc(Dish::getUpdateTime);
         List<Dish> list = dishService.list(queryWrapper);
-        return R.success(list);
+        List<DishDto> dishDtos=list.stream().map((item)->{
+            DishDto dishDto = new DishDto();
+            BeanUtils.copyProperties(item,dishDto);
+            Long categoryId = item.getCategoryId();
+            //根据id查询分类对象
+            Category category = categoryService.getById(categoryId);
+            if (category!=null){
+                String categoryName = category.getName();
+                dishDto.setCategoryName(categoryName);
+            }
+            //当前菜品的id
+            Long dishId = item.getId();
+            LambdaQueryWrapper<DishFlavor> queryWrapper1=new LambdaQueryWrapper<>();
+            queryWrapper1.eq(DishFlavor::getDishId,dishId);
+            List<DishFlavor> flavors = dishFlavorService.list(queryWrapper1);
+            dishDto.setFlavors(flavors);
+            return dishDto;
+        }).collect(Collectors.toList());
+        return R.success(dishDtos);
     }
 
     @PostMapping("/status/{status}")

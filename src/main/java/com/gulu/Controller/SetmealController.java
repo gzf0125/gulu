@@ -9,6 +9,7 @@ import com.gulu.Entity.Dish;
 import com.gulu.Entity.Setmeal;
 import com.gulu.Entity.SetmealDish;
 import com.gulu.Service.CategoryService;
+import com.gulu.Service.DishService;
 import com.gulu.Service.SetmealDishService;
 import com.gulu.Service.SetmealService;
 import lombok.extern.slf4j.Slf4j;
@@ -34,6 +35,8 @@ public class SetmealController {
     private SetmealDishService setmealDishService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private DishService dishService;
     //新增套餐
     @PostMapping
     public R<String> save(@RequestBody SetmealDto setmealDto){
@@ -120,4 +123,15 @@ public class SetmealController {
        setmealService.updateStatus(ids,status);
         return R.success("操作成功");
    }
+
+   @GetMapping("/list")
+   public R<List<Setmeal>> list(@RequestParam Long categoryId){
+        LambdaQueryWrapper<Setmeal> queryWrapper=new LambdaQueryWrapper<>();
+        queryWrapper.eq(Setmeal::getCategoryId,categoryId);
+        queryWrapper.eq(Setmeal::getStatus,1);
+       List<Setmeal> setmeals = setmealService.list(queryWrapper);
+       return R.success(setmeals);
+   }
+
+
 }
