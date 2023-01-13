@@ -59,11 +59,11 @@
                 <div class="divDesc">{{'月销' + (item.saleNum ? item.saleNum : 0)  }}</div>
                 <div class="divBottom"><span>￥</span><span>{{item.price/100}}</span></div>
                 <div class="divNum">
-                  <div class="divSubtract" v-if="item.number > 0">
-                    <img src="./images/subtract.png" @click.prevent.stop="subtractCart(item)"/>
-                  </div>
-                  <div class="divDishNum">{{item.number}}</div>
-                  <div class="divTypes" v-if="item.flavors && item.flavors.length > 0 && !item.number " @click.prevent.stop="chooseFlavorClick(item)">选择规格</div>
+<!--                  <div class="divSubtract" v-if="item.number > 0">-->
+<!--                    <img src="./images/subtract.png" @click.prevent.stop="subtractCart(item)"/>-->
+<!--                  </div>-->
+<!--                  <div class="divDishNum">{{item.number}}</div>-->
+                  <div class="divTypes" v-if="item.flavors && item.flavors.length > 0  " @click.prevent.stop="chooseFlavorClick(item)">选择规格</div>
                   <div class="divAdd" v-else>
                     <img src="./images/add.png" @click.prevent.stop="addCart(item)"/>
                   </div>
@@ -123,7 +123,9 @@
                 </div>
               </el-image>
               <div class="divDesc">
-                <div class="name">{{item.name}}</div>
+                <div class="name">{{item.name}}
+                {{item.dishFlavor}}
+                </div>
                 <div class="price">
                   <span class="spanMoney">￥</span>{{item.amount}}</div>
               </div>
@@ -471,10 +473,15 @@
             },
             //购物车中减少商品数量
             async cartNumberSubtract(item){
-              let params = {
-                  dishId:item.dishId,
-                  setmealId:item.setmealId,
+                let params = {
+                    amount:item.amount,//金额
+                    dishFlavor:item.dishFlavor,//口味  如果没有传undefined
+                    dishId:item.dishId,//菜品id
+                    setmealId:item.setmealId,//套餐id
+                    name:item.name,
+                    image:item.image
                 }
+
                 const res = await updateCartApi(params)
                 if(res.code === 1){
                 this.dishList.forEach(dish=>{
