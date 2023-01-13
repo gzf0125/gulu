@@ -54,6 +54,7 @@ public class ShoppingCartController {
             LambdaUpdateWrapper<ShoppingCart> updateWrapper=new LambdaUpdateWrapper<>();
             updateWrapper.eq(shoppingCart.getDishId()!=null,ShoppingCart::getDishId,shoppingCart.getDishId());
             updateWrapper.eq(shoppingCart.getSetmealId()!=null,ShoppingCart::getSetmealId,shoppingCart.getSetmealId());
+            updateWrapper.eq(shoppingCart.getDishFlavor()!=null,ShoppingCart::getDishFlavor,shoppingCart.getDishFlavor());
             updateWrapper.eq(ShoppingCart::getUserId,currentId);
             boolean update = shoppingCartService.update(one,updateWrapper);
         }else shoppingCartService.save(shoppingCart);
@@ -75,6 +76,7 @@ public class ShoppingCartController {
         if (one!=null){
             if (shoppingCart.getDishId()!=null||shoppingCart.getSetmealId()!=null){
                 one.setNumber(one.getNumber()-1);
+                //如果数量为0，则删去该条信息
                 if (one.getNumber()==0){
                     shoppingCartService.remove(queryWrapper);
                 }
