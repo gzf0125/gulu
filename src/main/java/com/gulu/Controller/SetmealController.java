@@ -15,6 +15,8 @@ import com.gulu.Service.SetmealService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
@@ -37,7 +39,14 @@ public class SetmealController {
     private CategoryService categoryService;
     @Autowired
     private DishService dishService;
-    //新增套餐
+
+    /**
+     * 新增套餐
+     *   allEntries==true删除缓存所有数据
+     * @param setmealDto
+     * @return
+     */
+    @CacheEvict(value = "setmealCache",allEntries = true)
     @PostMapping
     public R<String> save(@RequestBody SetmealDto setmealDto){
         log.info("套餐信息：{}",setmealDto);
@@ -93,10 +102,11 @@ public class SetmealController {
     /**
      * 删除套餐
      * @RequestParam用于将请求参数区数据映射到功能处理方法的参数上。
+     * allEntries==true删除缓存所有数据
      * @param ids
      * @return
      */
-
+    @CacheEvict(value = "setmealCache",allEntries = true)
     @DeleteMapping
     public R<String> delete(@RequestParam List<Long> ids){
         log.info("ids:{}",ids);
@@ -124,6 +134,7 @@ public class SetmealController {
         return R.success("操作成功");
    }
 
+   @Cacheable(value = "setmealCache",key = "#categoryId",unless = "#result==null")
    @GetMapping("/list")
    public R<List<Setmeal>> list(@RequestParam Long categoryId){
         LambdaQueryWrapper<Setmeal> queryWrapper=new LambdaQueryWrapper<>();

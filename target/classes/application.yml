@@ -1,5 +1,5 @@
 server:
-  port: 8086
+  port: 8087
 spring:
   application:
     #应用的名称，可选
@@ -14,6 +14,9 @@ spring:
     host: localhost
     port: 6379
     database: 0
+  cache:
+    redis:
+      time-to-live: 18000000 #设置缓存有效期
 mybatis-plus:
   configuration:
     #表名address_book-->实体类名AddressBook
